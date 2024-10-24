@@ -2,6 +2,8 @@
 '''A script for parsing HTTP request logs.
 '''
 import re
+import sys
+from collections import defaultdict
 
 
 def extract_input(input_line):
