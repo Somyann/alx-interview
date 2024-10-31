@@ -1,33 +1,39 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
+"""UTF-8 Validation"""
+
 
 def validUTF8(data):
-  # Number of bytes in the current UTF-8 character
-  num_bytes = 0
+    """Determines if a given data set
+    represents a valid utf-8 encoding
+    """
+    number_bytes = 0
 
-  # Masks to check the most significant bits
-  mask1 = 1 << 7
-  mask2 = 1 << 6
+    mask_1 = 1 << 7
+    mask_2 = 1 << 6
 
-  for num in data:
-    mask = 1 << 7
-    if num_bytes == 0:
-      # Count the number of leading 1's in the first byte
-      while mask & num:
-        num_bytes += 1
-        mask = mask >> 1
+    for i in data:
 
-      # 1 byte characters
-      if num_bytes == 0:
-        continue
+        mask_byte = 1 << 7
 
-      # Invalid scenarios according to UTF-8 encoding
-      if num_bytes == 1 or num_bytes > 4:
-        return False
-    else:
-      # Check if the byte is a valid continuation byte
-      if not (num & mask1 and not (num & mask2)):
-        return False
+        if number_bytes == 0:
 
-    num_bytes -= 1
+            while mask_byte & i:
+                number_bytes += 1
+                mask_byte = mask_byte >> 1
 
-  return num_bytes == 0
+            if number_bytes == 0:
+                continue
+
+            if number_bytes == 1 or number_bytes > 4:
+                return False
+
+        else:
+            if not (i & mask_1 and not (i & mask_2)):
+                return False
+
+        number_bytes -= 1
+
+    if number_bytes == 0:
+        return True
+
+    return False
