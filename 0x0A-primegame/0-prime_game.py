@@ -1,47 +1,45 @@
 #!/usr/bin/python3
+"""
+Define isWineer function, a solution to the Prime Game problem
+"""
 
-"""
-Prototype: def isWinner(x, nums)
-where x is the number of rounds and nums is an array of n
-Return: name of the player that won the most rounds
-If the winner cannot be determined, return None
-"""
+
+def primes(n):
+    """Return list of prime numbers between 1 and n inclusive
+       Args:
+        n (int): upper boundary of range. lower boundary is always 1
+    """
+    prime = []
+    sieve = [True] * (n + 1)
+    for p in range(2, n + 1):
+        if (sieve[p]):
+            prime.append(p)
+            for i in range(p, n + 1, p):
+                sieve[i] = False
+    return prime
+
 
 def isWinner(x, nums):
-    def sieve(max_n):
-        """Generate a list of prime counts up to max_n."""
-        is_prime = [True] * (max_n + 1)
-        is_prime[0] = is_prime[1] = False  # 0 and 1 are not primes
-        for i in range(2, int(max_n ** 0.5) + 1):
-            if is_prime[i]:
-                for multiple in range(i * i, max_n + 1, i):
-                    is_prime[multiple] = False
-        # Precompute number of primes up to each index
-        prime_count = [0] * (max_n + 1)
-        for i in range(1, max_n + 1):
-            prime_count[i] = prime_count[i - 1] + (1 if is_prime[i] else 0)
-        return prime_count
-
-    if not nums or x <= 0:
+    """
+    Determines winner of Prime Game
+    Args:
+        x (int): no. of rounds of game
+        nums (int): upper limit of range for each round
+    Return:
+        Name of winner (Maria or Ben) or None if winner cannot be found
+    """
+    if x is None or nums is None or x == 0 or nums == []:
         return None
-
-    max_n = max(nums)
-    prime_count = sieve(max_n)
-    
-    maria_wins = 0
-    ben_wins = 0
-
-    for n in nums:
-        primes_removed = prime_count[n]
-        # Maria wins if the number of primes removed is odd
-        if primes_removed % 2 == 1:
-            maria_wins += 1
+    Maria = Ben = 0
+    for i in range(x):
+        prime = primes(nums[i])
+        if len(prime) % 2 == 0:
+            Ben += 1
         else:
-            ben_wins += 1
-
-    if maria_wins > ben_wins:
-        return "Maria"
-    elif ben_wins > maria_wins:
-        return "Ben"
-    else:
-        return None
+            Maria += 1
+    if Maria > Ben:
+        return 'Maria'
+    elif Ben > Maria:
+        return 'Ben'
+    return None
+  
